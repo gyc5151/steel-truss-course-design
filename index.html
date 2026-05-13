@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#2f7d6b" />
+  <title>钢结构屋架课程设计助手</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <h1>钢结构屋架课程设计助手</h1>
+        <p>方案查表、荷载组合、屋架内力、截面初选、节点计算书草稿</p>
+      </div>
+      <div class="top-actions">
+        <button id="saveBtn" type="button" title="保存当前输入到本机浏览器">保存</button>
+        <button id="resetBtn" type="button" title="恢复默认示例">重置</button>
+        <button id="printBtn" type="button" class="primary" title="打印或另存为 PDF">打印</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="control-panel" aria-label="设计输入">
+      <section class="panel-block">
+        <h2>方案</h2>
+        <label class="field">
+          <span>方案号</span>
+          <input id="schemeNo" type="number" min="1" max="99" step="1" value="1" />
+        </label>
+        <div id="schemeBadge" class="scheme-badge"></div>
+        <label class="checkbox-line">
+          <input id="manualOverride" type="checkbox" />
+          <span>手动覆盖跨度与荷载</span>
+        </label>
+      </section>
+
+      <section class="panel-block">
+        <h2>个人信息</h2>
+        <label class="field">
+          <span>姓名</span>
+          <input id="studentName" type="text" placeholder="可空" />
+        </label>
+        <label class="field">
+          <span>学号</span>
+          <input id="studentId" type="text" placeholder="可空" />
+        </label>
+        <label class="field">
+          <span>班级</span>
+          <input id="className" type="text" value="22土木（房建方向）" />
+        </label>
+        <label class="field">
+          <span>指导教师</span>
+          <input id="teacherName" type="text" value="陈昉健" />
+        </label>
+      </section>
+
+      <section class="panel-block">
+        <h2>几何与系数</h2>
+        <div class="two-col">
+          <label class="field compact">
+            <span>跨度 m</span>
+            <input id="spanInput" type="number" min="12" max="36" step="0.1" />
+          </label>
+          <label class="field compact">
+            <span>柱距 m</span>
+            <input id="bayInput" type="number" min="3" max="12" step="0.1" value="6" />
+          </label>
+          <label class="field compact">
+            <span>节间 m</span>
+            <input id="panelInput" type="number" min="1" max="3" step="0.1" value="1.5" />
+          </label>
+          <label class="field compact">
+            <span>坡度</span>
+            <input id="slopeInput" type="number" min="0.02" max="0.2" step="0.005" value="0.1" />
+          </label>
+          <label class="field compact">
+            <span>端高 m</span>
+            <input id="endHeightInput" type="number" min="1.2" max="3.5" step="0.05" />
+          </label>
+          <label class="field compact">
+            <span>焊脚 mm</span>
+            <input id="weldLegInput" type="number" min="4" max="10" step="1" value="6" />
+          </label>
+        </div>
+      </section>
+
+      <section class="panel-block">
+        <h2>荷载标准值 kN/m²</h2>
+        <div class="two-col">
+          <label class="field compact"><span>防水层</span><input id="waterproofInput" type="number" step="0.01" value="0.40" /></label>
+          <label class="field compact"><span>找平层1</span><input id="levelTopInput" type="number" step="0.01" value="0.40" /></label>
+          <label class="field compact"><span>保温层</span><input id="insulationInput" type="number" step="0.01" /></label>
+          <label class="field compact"><span>隔气层</span><input id="vaporInput" type="number" step="0.01" value="0.05" /></label>
+          <label class="field compact"><span>找平层2</span><input id="levelBaseInput" type="number" step="0.01" value="0.30" /></label>
+          <label class="field compact"><span>屋面板</span><input id="roofPanelInput" type="number" step="0.01" value="1.40" /></label>
+          <label class="field compact"><span>屋架自重</span><input id="trussSelfInput" type="number" step="0.001" /></label>
+          <label class="field compact"><span>悬挂管道</span><input id="pipeInput" type="number" step="0.01" value="0.15" /></label>
+          <label class="field compact"><span>活荷载</span><input id="liveInput" type="number" step="0.01" value="0.60" /></label>
+          <label class="field compact"><span>雪荷载</span><input id="snowInput" type="number" step="0.01" /></label>
+          <label class="field compact"><span>积灰荷载</span><input id="ashInput" type="number" step="0.01" /></label>
+          <label class="field compact"><span>γG / γQ</span><input id="factorInput" type="text" value="1.2 / 1.4" /></label>
+        </div>
+      </section>
+
+      <section class="panel-block">
+        <h2>材料</h2>
+        <label class="field">
+          <span>钢材</span>
+          <input id="steelInput" type="text" />
+        </label>
+        <label class="field">
+          <span>焊条</span>
+          <input id="weldRodInput" type="text" />
+        </label>
+        <div class="two-col">
+          <label class="field compact"><span>f N/mm²</span><input id="steelStrengthInput" type="number" step="1" /></label>
+          <label class="field compact"><span>fwf N/mm²</span><input id="weldStrengthInput" type="number" step="1" /></label>
+        </div>
+      </section>
+
+      <button id="calculateBtn" type="button" class="primary wide">重新计算</button>
+    </aside>
+
+    <section class="workspace" aria-label="计算结果">
+      <nav class="tabs" aria-label="结果导航">
+        <button type="button" class="tab active" data-tab="overview">总览</button>
+        <button type="button" class="tab" data-tab="loads">荷载</button>
+        <button type="button" class="tab" data-tab="model">屋架图</button>
+        <button type="button" class="tab" data-tab="members">杆件</button>
+        <button type="button" class="tab" data-tab="sections">截面</button>
+        <button type="button" class="tab" data-tab="nodes">节点</button>
+        <button type="button" class="tab" data-tab="report">计算书</button>
+      </nav>
+
+      <section id="overview" class="tab-panel active">
+        <div class="summary-grid" id="summaryGrid"></div>
+        <section class="result-band">
+          <div class="section-title">
+            <h2>使用状态</h2>
+            <div class="actions-row">
+              <button id="exportJsonBtn" type="button">导出数据</button>
+              <label class="file-label">
+                导入数据
+                <input id="importJsonInput" type="file" accept="application/json" hidden />
+              </label>
+            </div>
+          </div>
+          <div id="noticeList" class="notice-list"></div>
+        </section>
+      </section>
+
+      <section id="loads" class="tab-panel">
+        <section class="result-band">
+          <div class="section-title">
+            <h2>荷载汇总</h2>
+            <button id="exportLoadsCsvBtn" type="button">导出荷载 CSV</button>
+          </div>
+          <div id="loadTables"></div>
+        </section>
+      </section>
+
+      <section id="model" class="tab-panel">
+        <section class="result-band">
+          <div class="section-title">
+            <h2>屋架计算简图</h2>
+            <button id="exportSvgBtn" type="button">导出 SVG</button>
+          </div>
+          <div id="trussSvgWrap" class="svg-wrap"></div>
+          <div id="geometryTable" class="table-wrap"></div>
+        </section>
+      </section>
+
+      <section id="members" class="tab-panel">
+        <section class="result-band">
+          <div class="section-title">
+            <h2>杆件内力</h2>
+            <button id="exportMembersCsvBtn" type="button">导出杆件 CSV</button>
+          </div>
+          <div id="memberTable" class="table-wrap"></div>
+        </section>
+      </section>
+
+      <section id="sections" class="tab-panel">
+        <section class="result-band">
+          <div class="section-title">
+            <h2>截面初选</h2>
+            <span class="muted">截面库为课程设计初选用，提交前按教材和规范表复核。</span>
+          </div>
+          <div id="sectionTable" class="table-wrap"></div>
+        </section>
+      </section>
+
+      <section id="nodes" class="tab-panel">
+        <section class="result-band">
+          <div class="section-title">
+            <h2>节点设计辅助</h2>
+            <span class="muted">按任务书要求列出下弦、上弦、支座、屋脊、下弦中央节点。</span>
+          </div>
+          <div id="nodeCards" class="node-grid"></div>
+        </section>
+      </section>
+
+      <section id="report" class="tab-panel">
+        <section class="result-band report-band">
+          <div class="section-title">
+            <h2>计算书草稿</h2>
+            <div class="actions-row">
+              <button id="copyReportBtn" type="button">复制</button>
+              <button id="exportReportBtn" type="button">导出 Markdown</button>
+            </div>
+          </div>
+          <textarea id="reportText" spellcheck="false"></textarea>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>本工具用于课程设计计算草稿与画图参考；最终数值、截面和节点构造应结合老师给定附图、教材表格和 GB 50017-2017 复核。</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

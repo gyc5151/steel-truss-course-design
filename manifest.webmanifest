@@ -1,0 +1,15 @@
+{
+  "name": "钢结构屋架课程设计助手",
+  "short_name": "钢屋架设计",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f5f7f3",
+  "theme_color": "#2f7d6b",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
