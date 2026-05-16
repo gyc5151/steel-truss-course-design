@@ -376,7 +376,7 @@ tr:last-child td {
 }
 
 .svg-wrap {
-  min-height: 420px;
+  min-height: 520px;
   overflow: auto;
   border: 1px solid #e2e9e6;
   border-radius: 7px;
@@ -386,8 +386,47 @@ tr:last-child td {
 .svg-wrap svg {
   display: block;
   width: 100%;
-  min-width: 860px;
+  min-width: 760px;
   height: auto;
+}
+
+.diagram-detail {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.9fr) minmax(320px, 1.4fr);
+  gap: 12px;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid #dce5e1;
+  border-radius: 8px;
+  background: #f8fbf7;
+}
+
+.diagram-detail h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+
+.diagram-detail p {
+  margin: 0;
+  color: #3c4946;
+  font-size: 13px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: minmax(90px, auto) minmax(0, 1fr);
+  gap: 6px 12px;
+  align-content: start;
+  font-size: 13px;
+}
+
+.detail-grid span {
+  color: var(--muted);
+}
+
+.detail-grid strong {
+  font-weight: 650;
+  min-width: 0;
 }
 
 .node-grid {
@@ -494,7 +533,8 @@ tr:last-child td {
 
   .summary-grid,
   .node-grid,
-  .two-col {
+  .two-col,
+  .diagram-detail {
     grid-template-columns: 1fr;
   }
 
