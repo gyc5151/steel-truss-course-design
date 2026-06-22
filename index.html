@@ -30,7 +30,7 @@
         <h2>方案</h2>
         <label class="field">
           <span>方案号</span>
-          <input id="schemeNo" type="number" min="1" max="99" step="1" value="1" />
+          <input id="schemeNo" type="number" min="1" max="21" step="1" value="1" />
         </label>
         <div id="schemeBadge" class="scheme-badge"></div>
         <label class="checkbox-line">
@@ -42,6 +42,12 @@
       <section class="panel-block">
         <h2>个人信息</h2>
         <label class="field">
+          <span>选择同学</span>
+          <select id="studentPreset">
+            <option value="">手动填写</option>
+          </select>
+        </label>
+        <label class="field">
           <span>姓名</span>
           <input id="studentName" type="text" placeholder="可空" />
         </label>
@@ -51,11 +57,19 @@
         </label>
         <label class="field">
           <span>班级</span>
-          <input id="className" type="text" value="22土木（房建方向）" />
+          <input id="className" type="text" value="23土木1、2班（房建）" />
         </label>
         <label class="field">
           <span>指导教师</span>
           <input id="teacherName" type="text" value="陈昉健" />
+        </label>
+        <label class="field">
+          <span>学年学期</span>
+          <input id="academicYear" type="text" value="2025-2026学年第二学期" />
+        </label>
+        <label class="field">
+          <span>设计时间</span>
+          <input id="designWeek" type="text" value="第16周" />
         </label>
       </section>
 
@@ -168,7 +182,10 @@
         <section class="result-band">
           <div class="section-title">
             <h2>屋架计算简图</h2>
-            <button id="exportSvgBtn" type="button">导出 SVG</button>
+            <div class="actions-row">
+              <button id="exportSvgBtn" type="button">导出 SVG</button>
+              <button id="exportDxfBtn" type="button">导出轴线 DXF</button>
+            </div>
           </div>
           <div id="trussSvgWrap" class="svg-wrap"></div>
           <div id="diagramDetail" class="diagram-detail"></div>
@@ -212,6 +229,7 @@
             <h2>计算书草稿</h2>
             <div class="actions-row">
               <button id="copyReportBtn" type="button">复制</button>
+              <button id="exportWordBtn" type="button">导出 Word</button>
               <button id="exportReportBtn" type="button">导出 Markdown</button>
             </div>
           </div>

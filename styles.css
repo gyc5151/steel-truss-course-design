@@ -178,6 +178,7 @@ button.wide {
 }
 
 .field input,
+.field select,
 textarea {
   width: 100%;
   min-width: 0;
@@ -189,6 +190,7 @@ textarea {
 }
 
 .field input:focus,
+.field select:focus,
 textarea:focus {
   outline: none;
   border-color: var(--accent);

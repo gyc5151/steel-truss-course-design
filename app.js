@@ -1,5 +1,5 @@
 (() => {
-  const STORAGE_KEY = "steel-truss-course-design-v1";
+  const STORAGE_KEY = "steel-truss-course-design-2026-v2";
 
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -7,11 +7,35 @@
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
   const ids = [
-    "schemeNo", "manualOverride", "studentName", "studentId", "className", "teacherName",
+    "schemeNo", "manualOverride", "studentPreset", "studentName", "studentId", "className", "teacherName", "academicYear", "designWeek",
     "spanInput", "bayInput", "panelInput", "slopeInput", "endHeightInput", "weldLegInput",
     "waterproofInput", "levelTopInput", "insulationInput", "vaporInput", "levelBaseInput",
     "roofPanelInput", "trussSelfInput", "pipeInput", "liveInput", "snowInput", "ashInput",
     "factorInput", "steelInput", "weldRodInput", "steelStrengthInput", "weldStrengthInput"
+  ];
+
+  const studentRoster = [
+    { scheme: 1, id: "2210908128", name: "郭毅成" },
+    { scheme: 2, id: "2310908102", name: "张景琦" },
+    { scheme: 3, id: "2310908103", name: "严琴彩" },
+    { scheme: 4, id: "2310908108", name: "蔡建航" },
+    { scheme: 5, id: "2310908111", name: "林加炜" },
+    { scheme: 6, id: "2310908115", name: "庞健" },
+    { scheme: 7, id: "2310908117", name: "纪居奇" },
+    { scheme: 8, id: "2310908118", name: "卢燚" },
+    { scheme: 9, id: "2310908120", name: "郑德臻" },
+    { scheme: 10, id: "2310908121", name: "刘凯涵" },
+    { scheme: 11, id: "2310908127", name: "王若文" },
+    { scheme: 12, id: "2310908128", name: "段夏飞" },
+    { scheme: 13, id: "2310908130", name: "陈建翔" },
+    { scheme: 14, id: "2310908132", name: "雷长昕" },
+    { scheme: 15, id: "2310908201", name: "黄鑫" },
+    { scheme: 16, id: "2310908203", name: "白水明" },
+    { scheme: 17, id: "2310908206", name: "艾佳亿" },
+    { scheme: 18, id: "2310908207", name: "洛桑土登" },
+    { scheme: 19, id: "2310908210", name: "陈佳闪" },
+    { scheme: 20, id: "2310908214", name: "金师宇" },
+    { scheme: 21, id: "2310908216", name: "陈林鹏" }
   ];
 
   const sections = [
@@ -64,23 +88,18 @@
 
   function getThermalAsh(schemeNo) {
     const pairs = [
-      [[1, 26], 0.55, 0.7], [[2, 27], 0.60, 0.8], [[3, 28], 0.65, 0.9],
-      [[4, 29], 0.70, 1.0], [[5, 30], 0.40, 1.1], [[6, 31], 0.45, 1.2],
-      [[7, 32], 0.50, 1.3], [[8, 33], 0.60, 0.7], [[9, 34], 0.65, 0.8],
-      [[10, 35], 0.70, 0.9], [[11, 36], 0.55, 1.0], [[12, 37], 0.50, 1.1],
-      [[13, 38], 0.40, 1.2], [[14, 39], 0.45, 1.3], [[15, 40], 0.65, 0.7],
-      [[16, 41], 0.70, 0.8], [[17, 42], 0.55, 0.9], [[18, 43], 0.40, 1.0],
-      [[19, 44], 0.45, 1.1], [[20, 45], 0.50, 1.2], [[21, 46], 0.60, 1.3],
-      [[22, 47], 0.70, 0.7], [[23, 48], 0.45, 0.8], [[24, 49], 0.50, 0.9],
-      [[25, 50], 0.60, 1.0], [[51, 76], 0.45, 1.1], [[52, 77], 0.50, 1.2],
-      [[53, 78], 0.60, 1.3], [[54, 79], 0.75, 0.7], [[55, 80], 0.50, 0.8],
-      [[56, 81], 0.55, 0.9], [[57, 82], 0.65, 1.0], [[58, 83], 0.70, 1.1],
-      [[59, 84], 0.60, 1.2], [[60, 85], 0.50, 1.3], [[61, 86], 0.60, 0.7],
-      [[62, 87], 0.55, 0.8], [[63, 88], 0.60, 0.9], [[64, 89], 0.65, 1.0],
-      [[65, 90], 0.70, 1.1], [[66, 91], 0.40, 1.2], [[67, 92], 0.45, 1.3],
-      [[68, 93], 0.75, 0.7], [[69, 94], 0.80, 0.8], [[70, 95], 0.65, 0.9],
-      [[71, 96], 0.60, 1.0], [[72, 97], 0.55, 1.1], [[73, 98], 0.50, 1.2],
-      [[74, 99], 0.45, 1.3], [[75], 0.65, 0.9]
+      [[1, 36], 0.55, 0.7], [[2, 37], 0.60, 0.8], [[3, 38], 0.65, 0.9],
+      [[4, 39], 0.70, 1.0], [[5, 40], 0.40, 1.1], [[6, 41], 0.45, 1.2],
+      [[7, 42], 0.50, 1.3], [[8, 43], 0.60, 0.7], [[9, 44], 0.65, 0.8],
+      [[10, 45], 0.70, 0.9], [[11, 46], 0.55, 1.0], [[12, 47], 0.50, 1.1],
+      [[13, 48], 0.40, 1.2], [[14, 49], 0.45, 1.3], [[15, 50], 0.65, 0.7],
+      [[16, 51], 0.70, 0.8], [[17, 52], 0.55, 0.9], [[18, 53], 0.40, 1.0],
+      [[19, 54], 0.45, 1.1], [[20, 55], 0.50, 1.2], [[21, 56], 0.60, 1.3],
+      [[22, 57], 0.70, 0.7], [[23, 58], 0.45, 0.8], [[24, 59], 0.50, 0.9],
+      [[25, 60], 0.60, 1.0], [[26, 61], 0.45, 1.1], [[27, 62], 0.50, 1.2],
+      [[28, 63], 0.60, 1.3], [[29, 64], 0.75, 0.7], [[30, 65], 0.50, 0.8],
+      [[31, 66], 0.55, 0.9], [[32, 67], 0.65, 1.0], [[33, 68], 0.70, 1.1],
+      [[34, 69], 0.60, 1.2], [[35, 70], 0.50, 1.3]
     ];
     const row = pairs.find(([keys]) => keys.includes(schemeNo));
     return row ? { insulation: row[1], ash: row[2] } : { insulation: 0.55, ash: 0.9 };
@@ -88,9 +107,9 @@
 
   function getSchemeDefaults(schemeNo) {
     let span = 18;
-    if (schemeNo >= 22 && schemeNo <= 41) span = 21;
-    if (schemeNo >= 42 && schemeNo <= 60) span = 24;
-    const snow = schemeNo <= 19 ? 0.65 : schemeNo <= 40 ? 0.55 : 0.45;
+    if (schemeNo >= 8 && schemeNo <= 14) span = 21;
+    if (schemeNo >= 15 && schemeNo <= 21) span = 24;
+    const snow = schemeNo <= 7 ? 0.65 : schemeNo <= 14 ? 0.55 : 0.45;
     const material = schemeNo % 2 === 1
       ? { steel: "Q235", weldRod: "E43", f: 215, fwf: 160 }
       : { steel: "Q345", weldRod: "E50", f: 310, fwf: 200 };
@@ -120,12 +139,14 @@
   function collectInputs() {
     const factors = parseFactors(val("factorInput"));
     return {
-      schemeNo: Math.round(num("schemeNo", 1)),
+      schemeNo: clamp(Math.round(num("schemeNo", 1)), 1, 21),
       manualOverride: val("manualOverride"),
       studentName: val("studentName").trim(),
       studentId: val("studentId").trim(),
       className: val("className").trim(),
       teacherName: val("teacherName").trim(),
+      academicYear: val("academicYear").trim(),
+      designWeek: val("designWeek").trim(),
       span: num("spanInput", 18),
       bay: num("bayInput", 6),
       panel: num("panelInput", 1.5),
@@ -156,7 +177,7 @@
 
   function applySchemeDefaults(force = false) {
     if (val("manualOverride") && !force) return;
-    const schemeNo = Math.round(num("schemeNo", 1));
+    const schemeNo = clamp(Math.round(num("schemeNo", 1)), 1, 21);
     const defaults = getSchemeDefaults(schemeNo);
     setVal("spanInput", defaults.span);
     setVal("bayInput", defaults.bay);
@@ -171,6 +192,23 @@
     setVal("weldRodInput", defaults.weldRod);
     setVal("steelStrengthInput", defaults.f);
     setVal("weldStrengthInput", defaults.fwf);
+  }
+
+  function populateStudentPreset() {
+    const select = $("#studentPreset");
+    select.innerHTML = `<option value="">手动填写</option>${studentRoster.map((student) =>
+      `<option value="${student.id}">${student.scheme}号 · ${escapeHtml(student.name)} · ${student.id}</option>`
+    ).join("")}`;
+  }
+
+  function applyStudentPreset() {
+    const student = studentRoster.find((item) => item.id === val("studentPreset"));
+    if (!student) return;
+    setVal("studentName", student.name);
+    setVal("studentId", student.id);
+    setVal("schemeNo", student.scheme);
+    applySchemeDefaults(true);
+    calculate();
   }
 
   function buildLoads(input) {
@@ -556,10 +594,11 @@
   function renderNotices() {
     const input = state.input;
     const notices = [
-      ["本工具按任务书附表进行方案查表；附表一可读文本显示 1-21 为 18m、22-41 为 21m、42-60 为 24m。若老师另行调整，请勾选手动覆盖。", "warn"],
+      ["2026年任务书方案表：1-7 号为 18m、8-14 号为 21m、15-21 号为 24m。若老师另行调整，请勾选手动覆盖。", "warn"],
       ["教材做法：屋面荷载按水平投影面积折算为节点荷载，先求全跨和半跨作用下内力，再列表取各杆最不利内力。", ""],
       ["杆件内力来自平面桁架刚度法和内置梯形屋架简图，可等效生成内力系数。提交前应对照老师给定屋架几何尺寸及内力系数图复核。", "warn"],
       ["默认分项系数已按教材例题设为 γG=1.3、γQ=1.5；如课堂按新版组合或老师要求取值，可在左侧直接修改。", "warn"],
+      ["2026年成果要求：计算书采用 A4 Word 文档，工程图用 AutoCAD 绘制 1 号图。DXF 导出仅是屋架轴线与杆件编号底图。", ""],
       [`当前模型：${input.span}m 跨，${state.model.n} 个节间，屋面板节点间距约 ${nf(state.model.panel, 2)}m。`, ""]
     ];
     $("#noticeList").innerHTML = notices.map(([text, tone]) => `<div class="notice ${tone}">${text}</div>`).join("");
@@ -888,6 +927,10 @@
 学号：${input.studentId || "________"}  
 班级：${input.className || "________"}  
 指导教师：${input.teacherName || "________"}  
+学年学期：${input.academicYear || "________"}
+
+设计时间：${input.designWeek || "________"}
+
 设计方案号：${input.schemeNo}
 
 本设计为某工业厂房梯形钢屋架设计。厂房柱距 ${nf(input.bay, 1)} m，屋架跨度 ${nf(input.span, 1)} m，屋面采用 1.5 m × 6.0 m 预应力混凝土大型屋面板，屋面坡度 i=${nf(input.slope, 3)}，屋架铰支于钢筋混凝土柱上。
@@ -976,6 +1019,8 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
 
 ## 7 施工图整理提示
 
+本年课程设计要求用 AutoCAD 绘制 1 号施工图。网页导出的 DXF 只包含轴线和杆件编号，应在 AutoCAD 中继续完成节点板、双角钢、焊缝、尺寸和材料表。
+
 施工图应包括屋架简图、半榀屋架正面图、上下弦平面图、侧面图、剖面图、必要零件详图、材料表、焊缝和螺栓说明、标题栏。按教材做法，屋架索引简图宜放在图纸上部；对称屋架可左半跨标杆件几何长度，右半跨标杆件最不利内力，并在 L≥24m 时注明起拱度。节点大样比例宜大于轴线图比例，图中应标明零件编号、加工尺寸、定位尺寸、孔洞位置、焊缝尺寸及工厂焊缝/安装焊缝区别。
 
 ## 8 参考文献
@@ -1023,6 +1068,65 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
       nf(m.tension, 3), nf(m.compression, 3), m.controlCase
     ]);
     exportCsv("钢屋架杆件内力.csv", ["杆件", "类别", "长度m", "组一", "组二左", "组二右", "组三左", "组三右", "最大拉力", "最大压力", "控制组合"], rows);
+  }
+
+  function exportDxf() {
+    const groupLayers = { "上弦": "TOP_CHORD", "下弦": "BOTTOM_CHORD", "竖杆": "VERTICAL", "斜腹杆": "DIAGONAL" };
+    const dxf = ["0", "SECTION", "2", "HEADER", "9", "$INSUNITS", "70", "4", "0", "ENDSEC", "0", "SECTION", "2", "ENTITIES"];
+    const push = (...parts) => dxf.push(...parts.map(String));
+    for (const member of state.members) {
+      const a = state.model.nodes[member.a];
+      const b = state.model.nodes[member.b];
+      const layer = groupLayers[member.group] || "TRUSS";
+      push("0", "LINE", "8", layer, "10", a.x * 1000, "20", a.y * 1000, "30", 0, "11", b.x * 1000, "21", b.y * 1000, "31", 0);
+      const mx = (a.x + b.x) * 500;
+      const my = (a.y + b.y) * 500;
+      push("0", "TEXT", "8", "MEMBER_ID", "10", mx, "20", my + 120, "30", 0, "40", 160, "1", `${member.id} ${signed(nf(member.controlForce, 0))}`);
+    }
+    for (const node of state.model.nodes) {
+      push("0", "CIRCLE", "8", "NODE", "10", node.x * 1000, "20", node.y * 1000, "30", 0, "40", 45);
+    }
+    const titleY = (state.input.endHeight + state.input.span * state.input.slope / 2) * 1000 + 700;
+    push("0", "TEXT", "8", "TEXT", "10", state.input.span * 500, "20", titleY, "30", 0, "40", 260, "72", 1, "11", state.input.span * 500, "21", titleY, "31", 0, "1", `${state.input.span}m STEEL TRUSS AXIS REFERENCE`);
+    push("0", "ENDSEC", "0", "EOF");
+    download("钢屋架轴线参考图.dxf", dxf.join("\r\n"), "application/dxf");
+  }
+
+  function exportWordReport() {
+    const lines = $("#reportText").value.split("\n");
+    let inList = false;
+    const body = [];
+    for (const raw of lines) {
+      const line = raw;
+      if (line.startsWith("- ")) {
+        if (!inList) {
+          body.push("<ul>");
+          inList = true;
+        }
+        body.push(`<li>${escapeHtml(line.slice(2))}</li>`);
+        continue;
+      }
+      if (inList) {
+        body.push("</ul>");
+        inList = false;
+      }
+      if (!line.trim()) {
+        body.push("<p>&nbsp;</p>");
+      } else if (line.startsWith("### ")) {
+        body.push(`<h3>${escapeHtml(line.slice(4))}</h3>`);
+      } else if (line.startsWith("## ")) {
+        body.push(`<h2>${escapeHtml(line.slice(3))}</h2>`);
+      } else if (line.startsWith("# ")) {
+        body.push(`<h1>${escapeHtml(line.slice(2))}</h1>`);
+      } else {
+        body.push(`<p>${escapeHtml(line).replace(/  $/, "<br>")}</p>`);
+      }
+    }
+    if (inList) body.push("</ul>");
+    const html = `<!doctype html><html><head><meta charset="utf-8"><style>
+      @page{size:A4;margin:25mm 25mm 25mm 30mm}body{font-family:"SimSun","Microsoft YaHei",sans-serif;font-size:12pt;line-height:1.6;color:#000}h1{text-align:center;font-size:20pt}h2{font-size:16pt;margin-top:18pt}h3{font-size:14pt;margin-top:14pt}p{margin:5pt 0}li{margin:3pt 0}
+    </style></head><body>${body.join("")}</body></html>`;
+    download("钢结构课程设计计算书草稿.doc", `\ufeff${html}`, "application/msword;charset=utf-8");
   }
 
   function exportJson() {
@@ -1082,10 +1186,13 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
     localStorage.removeItem(STORAGE_KEY);
     setVal("schemeNo", 1);
     setVal("manualOverride", false);
+    setVal("studentPreset", "");
     setVal("studentName", "");
     setVal("studentId", "");
-    setVal("className", "22土木（房建方向）");
+    setVal("className", "23土木1、2班（房建）");
     setVal("teacherName", "陈昉健");
+    setVal("academicYear", "2025-2026学年第二学期");
+    setVal("designWeek", "第16周");
     setVal("bayInput", 6);
     setVal("panelInput", 1.5);
     setVal("slopeInput", 0.1);
@@ -1103,7 +1210,9 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
   }
 
   function wireEvents() {
+    $("#studentPreset").addEventListener("change", applyStudentPreset);
     $("#schemeNo").addEventListener("input", () => {
+      setVal("studentPreset", "");
       applySchemeDefaults();
       calculate();
     });
@@ -1111,7 +1220,7 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
       applySchemeDefaults();
       calculate();
     });
-    ids.filter((id) => !["schemeNo", "manualOverride"].includes(id)).forEach((id) => {
+    ids.filter((id) => !["schemeNo", "manualOverride", "studentPreset"].includes(id)).forEach((id) => {
       const el = $(`#${id}`);
       if (el) el.addEventListener("input", calculate);
     });
@@ -1134,6 +1243,7 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
     $("#exportSvgBtn").addEventListener("click", () => {
       download("钢屋架计算简图.svg", $("#trussSvgWrap").innerHTML, "image/svg+xml");
     });
+    $("#exportDxfBtn").addEventListener("click", exportDxf);
     $("#copyReportBtn").addEventListener("click", async () => {
       await navigator.clipboard.writeText($("#reportText").value);
       $("#copyReportBtn").textContent = "已复制";
@@ -1142,6 +1252,7 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
     $("#exportReportBtn").addEventListener("click", () => {
       download("钢结构课程设计计算书草稿.md", $("#reportText").value, "text/markdown;charset=utf-8");
     });
+    $("#exportWordBtn").addEventListener("click", exportWordReport);
     $$(".tab").forEach((tab) => {
       tab.addEventListener("click", () => {
         $$(".tab").forEach((item) => item.classList.toggle("active", item === tab));
@@ -1151,6 +1262,7 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    populateStudentPreset();
     wireEvents();
     const restored = loadLocal();
     if (!restored) applySchemeDefaults(true);
