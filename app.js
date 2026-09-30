@@ -7,36 +7,13 @@
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
   const ids = [
-    "schemeNo", "manualOverride", "studentPreset", "studentName", "studentId", "className", "teacherName", "academicYear", "designWeek",
+    "schemeNo", "manualOverride", "schemePreset", "studentName", "studentId", "className", "teacherName", "academicYear", "designWeek",
     "spanInput", "bayInput", "panelInput", "slopeInput", "endHeightInput", "weldLegInput",
     "waterproofInput", "levelTopInput", "insulationInput", "vaporInput", "levelBaseInput",
     "roofPanelInput", "trussSelfInput", "pipeInput", "liveInput", "snowInput", "ashInput",
     "factorInput", "steelInput", "weldRodInput", "steelStrengthInput", "weldStrengthInput"
   ];
 
-  const studentRoster = [
-    { scheme: 1, id: "2210908128", name: "郭毅成" },
-    { scheme: 2, id: "2310908102", name: "张景琦" },
-    { scheme: 3, id: "2310908103", name: "严琴彩" },
-    { scheme: 4, id: "2310908108", name: "蔡建航" },
-    { scheme: 5, id: "2310908111", name: "林加炜" },
-    { scheme: 6, id: "2310908115", name: "庞健" },
-    { scheme: 7, id: "2310908117", name: "纪居奇" },
-    { scheme: 8, id: "2310908118", name: "卢燚" },
-    { scheme: 9, id: "2310908120", name: "郑德臻" },
-    { scheme: 10, id: "2310908121", name: "刘凯涵" },
-    { scheme: 11, id: "2310908127", name: "王若文" },
-    { scheme: 12, id: "2310908128", name: "段夏飞" },
-    { scheme: 13, id: "2310908130", name: "陈建翔" },
-    { scheme: 14, id: "2310908132", name: "雷长昕" },
-    { scheme: 15, id: "2310908201", name: "黄鑫" },
-    { scheme: 16, id: "2310908203", name: "白水明" },
-    { scheme: 17, id: "2310908206", name: "艾佳亿" },
-    { scheme: 18, id: "2310908207", name: "洛桑土登" },
-    { scheme: 19, id: "2310908210", name: "陈佳闪" },
-    { scheme: 20, id: "2310908214", name: "金师宇" },
-    { scheme: 21, id: "2310908216", name: "陈林鹏" }
-  ];
 
   const sections = [
     { name: "2L50x5", area: 960, i: 15.2 },
@@ -194,19 +171,17 @@
     setVal("weldStrengthInput", defaults.fwf);
   }
 
-  function populateStudentPreset() {
-    const select = $("#studentPreset");
-    select.innerHTML = `<option value="">手动填写</option>${studentRoster.map((student) =>
-      `<option value="${student.id}">${student.scheme}号 · ${escapeHtml(student.name)} · ${student.id}</option>`
+  function populateSchemePreset() {
+    const select = $("#schemePreset");
+    select.innerHTML = `<option value="">选择方案号</option>${Array.from({ length: 21 }, (_, index) =>
+      `<option value="${index + 1}">${index + 1} 号方案</option>`
     ).join("")}`;
   }
 
-  function applyStudentPreset() {
-    const student = studentRoster.find((item) => item.id === val("studentPreset"));
-    if (!student) return;
-    setVal("studentName", student.name);
-    setVal("studentId", student.id);
-    setVal("schemeNo", student.scheme);
+  function applySchemePreset() {
+    const schemeNo = Number(val("schemePreset"));
+    if (!Number.isInteger(schemeNo) || schemeNo < 1 || schemeNo > 21) return;
+    setVal("schemeNo", schemeNo);
     applySchemeDefaults(true);
     calculate();
   }
@@ -1345,13 +1320,13 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
     localStorage.removeItem(STORAGE_KEY);
     setVal("schemeNo", 1);
     setVal("manualOverride", false);
-    setVal("studentPreset", "");
+    setVal("schemePreset", "");
     setVal("studentName", "");
     setVal("studentId", "");
-    setVal("className", "23土木1、2班（房建）");
-    setVal("teacherName", "陈昉健");
-    setVal("academicYear", "2025-2026学年第二学期");
-    setVal("designWeek", "第16周");
+    setVal("className", "");
+    setVal("teacherName", "");
+    setVal("academicYear", "");
+    setVal("designWeek", "");
     setVal("bayInput", 6);
     setVal("panelInput", 1.5);
     setVal("slopeInput", 0.1);
@@ -1369,9 +1344,9 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
   }
 
   function wireEvents() {
-    $("#studentPreset").addEventListener("change", applyStudentPreset);
+    $("#schemePreset").addEventListener("change", applySchemePreset);
     $("#schemeNo").addEventListener("input", () => {
-      setVal("studentPreset", "");
+      setVal("schemePreset", "");
       applySchemeDefaults();
       calculate();
     });
@@ -1379,7 +1354,7 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
       applySchemeDefaults();
       calculate();
     });
-    ids.filter((id) => !["schemeNo", "manualOverride", "studentPreset"].includes(id)).forEach((id) => {
+    ids.filter((id) => !["schemeNo", "manualOverride", "schemePreset"].includes(id)).forEach((id) => {
       const el = $(`#${id}`);
       if (el) el.addEventListener("input", calculate);
     });
@@ -1421,7 +1396,7 @@ lw=${nf(n.control, 1)}×1000/(2×0.7×${nf(input.weldLeg, 0)}×${nf(input.fwf, 0
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    populateStudentPreset();
+    populateSchemePreset();
     wireEvents();
     const restored = loadLocal();
     if (!restored) applySchemeDefaults(true);

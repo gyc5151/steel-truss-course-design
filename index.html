@@ -32,6 +32,12 @@
           <span>方案号</span>
           <input id="schemeNo" type="number" min="1" max="21" step="1" value="1" />
         </label>
+        <label class="field">
+          <span>快速选择方案号</span>
+          <select id="schemePreset">
+            <option value="">选择方案号</option>
+          </select>
+        </label>
         <div id="schemeBadge" class="scheme-badge"></div>
         <label class="checkbox-line">
           <input id="manualOverride" type="checkbox" />
@@ -40,13 +46,7 @@
       </section>
 
       <section class="panel-block">
-        <h2>个人信息</h2>
-        <label class="field">
-          <span>选择同学</span>
-          <select id="studentPreset">
-            <option value="">手动填写</option>
-          </select>
-        </label>
+        <h2>计算书封面信息</h2>
         <label class="field">
           <span>姓名</span>
           <input id="studentName" type="text" placeholder="可空" />
@@ -57,19 +57,19 @@
         </label>
         <label class="field">
           <span>班级</span>
-          <input id="className" type="text" value="23土木1、2班（房建）" />
+          <input id="className" type="text" />
         </label>
         <label class="field">
           <span>指导教师</span>
-          <input id="teacherName" type="text" value="陈昉健" />
+          <input id="teacherName" type="text" />
         </label>
         <label class="field">
           <span>学年学期</span>
-          <input id="academicYear" type="text" value="2025-2026学年第二学期" />
+          <input id="academicYear" type="text" />
         </label>
         <label class="field">
           <span>设计时间</span>
-          <input id="designWeek" type="text" value="第16周" />
+          <input id="designWeek" type="text" />
         </label>
       </section>
 
